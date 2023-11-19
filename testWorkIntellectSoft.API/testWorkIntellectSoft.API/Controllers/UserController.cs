@@ -18,7 +18,7 @@ namespace testWorkIntellectSoft.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserAnswerDTO>>> GetUsers(int? page = null, string? search = null)
+        public async Task<ActionResult<UserAnswerDTO>> GetUsers(int? page = null, string? search = null)
         {
             if (_context.Users == null)
                 return NotFound();
@@ -32,13 +32,12 @@ namespace testWorkIntellectSoft.API.Controllers
                     throw new Exception("Страница за пределами поиска");
 
                 var users = await userWork.GetUsers(page.Value, search);
-                return (from a in users
-                        select new UserAnswerDTO
+                return new UserAnswerDTO
                         {
                             CurentPage = page.Value,
                             TotalPage = maxPage,
                             Users = users
-                        }).ToList();
+                        };
             }
             catch (Exception ex)
             {
@@ -106,7 +105,7 @@ namespace testWorkIntellectSoft.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUserStruct(int id)
+        public async Task<ActionResult> DeleteUserStruct(int id)
         {
             if (_context.Users == null)
             {

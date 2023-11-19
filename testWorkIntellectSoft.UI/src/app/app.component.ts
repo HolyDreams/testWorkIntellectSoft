@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { SuperHero } from './models/super-hero';
-import { SuperHeroService } from './services/super-hero.service';
+import { UserService } from './services/users.service';
+import { Answer } from './models/answer';
 
 @Component({
   selector: 'app-root',
@@ -8,19 +8,17 @@ import { SuperHeroService } from './services/super-hero.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'SuperHero.UI';
-  heroes: SuperHero[] = [];
-  heroToEdit?: SuperHero;
-
-  constructor(private superHeroService: SuperHeroService) {}
+  title = 'User.UI';
+  answer: Answer | undefined;
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.superHeroService
-      .getSuperHeroes()
-      .subscribe((result: SuperHero[]) => (this.heroes = result));
+    this.userService
+      .getUsers()
+      .subscribe((result: Answer) => (this.answer = result));
   }
 
-  updateHeroList(heroes: SuperHero[]) {
+  /*updateHeroList(heroes: SuperHero[]) {
     this.heroes = heroes;
   }
 
@@ -30,5 +28,5 @@ export class AppComponent {
 
   editHero(hero: SuperHero) {
     this.heroToEdit = hero;
-  }
+  }*/
 }
