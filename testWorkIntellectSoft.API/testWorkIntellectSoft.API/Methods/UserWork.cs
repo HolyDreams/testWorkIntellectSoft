@@ -35,6 +35,7 @@ namespace testWorkIntellectSoft.API.Methods
         {
             var user = await getUser(id);
             user.DeleteStateCode = 1;
+            _context.Update(user);
             await _context.SaveChangesAsync();
         }
 
@@ -49,7 +50,15 @@ namespace testWorkIntellectSoft.API.Methods
         public async Task EditUser(UserDTO user)
         {
             var dbUser = await getUser(user.ID);
+
+            var userPhones = user.Phones.Where(a => a.PhoneNumber != null && !string.IsNullOrWhiteSpace(a.PhoneNumber)).ToArray();
+            var phones = getDBPhone(userPhones);
+            phones.AddRange(getDelPhones(dbUser.Phones.ToArray(), userPhones));
+
             dbUser = getDBUser(user);
+            dbUser.Phones = phones;
+
+            _context.Update(dbUser);
 
             await _context.SaveChangesAsync();
         }
@@ -66,15 +75,45 @@ namespace testWorkIntellectSoft.API.Methods
         {
             return new UserDBStruct
             {
+                ID = user.ID,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 BirthYear = user.Birthyear,
                 Phones = (from a in user.Phones
                           select new PhoneDBStruct
                           {
-                              PhoneNumber = a.PhoneNumber,
+                              PhoneID = a.PhoneID,
+                              PhoneNumber = a.PhoneNumber
                           }).ToArray()
+                
             };
+        }
+
+        private List<PhoneDBStruct> getDBPhone(params PhoneDTO[] phone)
+        {
+            return (from a in phone
+                    select new PhoneDBStruct
+                    {
+                        PhoneID = a.PhoneID,
+                        PhoneNumber = a.PhoneNumber,
+                        DeleteStateCode = 0
+                    }).ToList();
+        }
+
+        private List<PhoneDBStruct> getDelPhones(PhoneDBStruct[] delPhones, PhoneDTO[] phone)
+        {
+            return (from a in delPhones
+                    join b in phone on a.PhoneID equals b.PhoneID
+                    into b_d
+                    from b in b_d.DefaultIfEmpty()
+
+                    where a.PhoneID != b?.PhoneID
+                    select new PhoneDBStruct
+                    {
+                        PhoneID = a.PhoneID,
+                        PhoneNumber = a.PhoneNumber,
+                        DeleteStateCode = 1
+                    }).ToList();
 
         }
     }

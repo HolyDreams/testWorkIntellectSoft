@@ -10,8 +10,9 @@ import { User } from './models/users';
 })
 export class AppComponent {
   title = 'User.UI';
-  answer: Answer | undefined;
+  answer!: Answer;
   userToEdit?: User;
+
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
@@ -21,20 +22,26 @@ export class AppComponent {
   }
 
   initNewUser() {
-    this.userToEdit = new User();
+      this.userToEdit = new User();
   }
+  
   editUser(user: User) {
     this.userToEdit = user;
   }
-  /*updateHeroList(heroes: SuperHero[]) {
-    this.heroes = heroes;
+
+  searchUser(event: any) {
+    this.userService
+      .getSearch(event.target.value)
+      .subscribe((result: Answer) => (this.answer = result));
   }
 
-  initNewHero() {
-    this.heroToEdit = new SuperHero();
+  updateUserList(users: User[]) {
+    this.answer.users = users;
   }
 
-  editHero(hero: SuperHero) {
-    this.heroToEdit = hero;
-  }*/
+  delUser(user: User) {
+    this.userService
+    .deleteUser(user)
+    .subscribe((result: Answer) => (this.answer = result));
+  }
 }

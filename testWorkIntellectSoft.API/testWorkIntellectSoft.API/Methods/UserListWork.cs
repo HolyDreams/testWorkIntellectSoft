@@ -19,7 +19,7 @@ namespace testWorkIntellectSoft.API.Methods
         }
         public async Task<UserDTO[]> GetUsers(int page, string? search = null)
         {
-            var usersList = search == null ? await _context.Users.Include(a => a.Phones).Where(a => a.DeleteStateCode == 0).Skip(50 * page).Take(50).ToListAsync() : await getSearchUser(search).Skip(page * 50).Take(50).ToListAsync();
+            var usersList = search == null ? await _context.Users.Include(a => a.Phones.Where(q => q.DeleteStateCode == 0)).Where(a => a.DeleteStateCode == 0).Skip(50 * page).Take(50).ToListAsync() : await getSearchUser(search).Skip(page * 50).Take(50).ToListAsync();
             return getUserDTO(usersList);
         }
 
@@ -43,7 +43,7 @@ namespace testWorkIntellectSoft.API.Methods
         private IQueryable<UserDBStruct> getSearchUser(string search)
         {
             search = search.ToLower();
-            return _context.Users.Include(a => a.Phones).Where(a => a.DeleteStateCode == 0 &&
+            return _context.Users.Include(a => a.Phones.Where(q => q.DeleteStateCode == 0)).Where(a => a.DeleteStateCode == 0 &&
                                              (a.FirstName != null && a.FirstName.ToLower().Contains(search)) ||
                                              (a.LastName != null && a.LastName.ToLower().Contains(search)) ||
                                              (a.Phones != null && a.Phones.Any(q => q.PhoneNumber != null && q.DeleteStateCode == 0 && q.PhoneNumber.Contains(search))));

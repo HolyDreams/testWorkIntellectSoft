@@ -5,5 +5,5 @@ export class User {
     firstName = "";
     lastName = "";
     birthyear!: number;
-    phones?: Phone[];
+    phones!: Phone[];
 }

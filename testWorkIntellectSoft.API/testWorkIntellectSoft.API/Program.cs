@@ -3,22 +3,22 @@ using testWorkIntellectSoft.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UserContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
                       providerOptions => providerOptions.EnableRetryOnFailure());
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
-builder.Services.AddCors(options => options.AddPolicy(name: "SuperHeroOrigins",
+builder.Services.AddCors(options => options.AddPolicy(name: "myCors",
     policy =>
     {
-        policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     }));
 
 var app = builder.Build();
@@ -30,7 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("SuperHeroOrigins");
+app.UseCors("myCors");
 
 app.UseHttpsRedirection();
 

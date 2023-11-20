@@ -30,14 +30,14 @@ hr {
     min-width: 50px;
 }
 
-#add-button {
+#add-button, #table-button {
     width: 2.4rem;
     height: 1.9rem;
     background: none;
     border-style:unset;
 }
 
-#add-icon {
+#add-icon, #table-icon {
     width: 1.9rem;
     height: 1.9rem;
 }
@@ -52,4 +52,12 @@ div.t {
 }
 div.t > input {
     width: 100%;
+}
+
+#head-table, #data-tabe {
+    font-size: 1.3rem;
+}
+
+#colbut-table {
+    border: none;
 }

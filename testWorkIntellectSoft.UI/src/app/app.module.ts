@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
+import { CheckMaxLength } from './services/check-max-length';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [CheckMaxLength],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
