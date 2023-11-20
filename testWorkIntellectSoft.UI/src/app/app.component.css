@@ -2,6 +2,54 @@ td {
     border: solid black 0.5px;
 }
 table{
+    margin-top: 10ch;
     border-spacing: 0px;
     border-collapse: collapse;
   }
+
+.center-table {
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 600;
+}
+
+hr {
+    border: solid deepskyblue 1px;
+}
+
+#header-search, #add-button {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 1.1rem;
+    height: 1.7rem;
+    padding: 0;
+}
+
+#header-search {
+    width: 40%;
+    min-width: 50px;
+}
+
+#add-button {
+    width: 2.4rem;
+    height: 1.9rem;
+    background: none;
+    border-style:unset;
+}
+
+#add-icon {
+    width: 1.9rem;
+    height: 1.9rem;
+}
+
+div { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+div.t {
+    width: 100%;
+}
+div.t > input {
+    width: 100%;
+}

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "SuperHero.UI": {
+    "testWorkIntellectSoft.UI": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/super-hero.ui",
+            "outputPath": "dist/user.ui",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "SuperHero.UI:build:production"
+              "browserTarget": "testWorkIntellectSoft.UI:build:production"
             },
             "development": {
-              "browserTarget": "SuperHero.UI:build:development"
+              "browserTarget": "testWorkIntellectSoft.UI:build:development"
             }
           },
           "defaultConfiguration": "development"

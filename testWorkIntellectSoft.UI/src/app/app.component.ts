@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { UserService } from './services/users.service';
 import { Answer } from './models/answer';
+import { User } from './models/users';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import { Answer } from './models/answer';
 export class AppComponent {
   title = 'User.UI';
   answer: Answer | undefined;
+  userToEdit?: User;
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
@@ -18,6 +20,12 @@ export class AppComponent {
       .subscribe((result: Answer) => (this.answer = result));
   }
 
+  initNewUser() {
+    this.userToEdit = new User();
+  }
+  editUser(user: User) {
+    this.userToEdit = user;
+  }
   /*updateHeroList(heroes: SuperHero[]) {
     this.heroes = heroes;
   }

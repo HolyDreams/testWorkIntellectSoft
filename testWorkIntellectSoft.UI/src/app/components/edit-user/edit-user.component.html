@@ -1,0 +1,20 @@
+<div class="main" *ngIf="user">
+    <div id="userDiv">
+        Фамилия
+        <input id="text-edit" type="text" placeholder="Фамилия" size="70" [(ngModel)]="user.firstName"/>
+    </div>
+    <div id="userDiv">
+        Имя
+        <input id="text-edit" type="text" placeholder="Имя" size="70" [(ngModel)]="user.lastName" />
+    </div>
+    <div id="userDiv">
+        Год рождения
+        <input id="text-number" type="number" placeholder="Год рождения" size="70" [(ngModel)]="user.birthyear" />
+    </div>
+    <div>
+        <br />
+        <button class="save" (click)="updateUser(user)" *ngIf="user.id">Сохранить</button>
+        <button class="del" (click)="deleteUser(user)" *ngIf="user.id">Удалить</button>
+        <button class="save" (click)="createUser(user)" *ngIf="!user.id">Сохранить</button>
+    </div>
+</div>
