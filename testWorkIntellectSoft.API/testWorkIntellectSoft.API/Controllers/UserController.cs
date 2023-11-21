@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using testWorkIntellectSoft.API.Data;
-using testWorkIntellectSoft.API.Methods;
 using testWorkIntellectSoft.API.Models.DTO;
+using testWorkIntellectSoft.API.Services;
 
 namespace testWorkIntellectSoft.API.Controllers
 {
@@ -10,34 +10,25 @@ namespace testWorkIntellectSoft.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserContext _context;
+        private readonly IUserService _userService;
 
-        public UserController(UserContext context)
+        public UserController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<UserAnswerDTO>> GetUsers(int? page = null, string? search = null)
+        public async Task<IActionResult> GetUsers(int page = 0, string? search = null)
         {
-            if (_context.Users == null)
-                return NotFound();
-
             try
             {
-                page = page ?? 0;
-                var userWork = new UserListWork(_context);
-                var maxPage = userWork.GetCountPages(search);
+                _userService.CheckNull();
+                var maxPage = _userService.GetCountPages(search);
                 if (page > maxPage)
                     throw new Exception("Страница за пределами поиска");
 
-                var users = await userWork.GetUsers(page.Value, search);
-                return new UserAnswerDTO
-                        {
-                            CurentPage = page.Value,
-                            TotalPage = maxPage,
-                            Users = users
-                        };
+                var users = await _userService.GetUsersAsync(page, search);
+                return Ok(_userService.GetAnswer(users, page, maxPage));
             }
             catch (Exception ex)
             {
@@ -47,18 +38,15 @@ namespace testWorkIntellectSoft.API.Controllers
 
         [HttpGet]
         [Route("edit")]
-        public async Task<ActionResult<UserDTO>> GetUserByID(int? id = null)
+        public async Task<IActionResult> GetUserByID(int? id = null)
         {
-            if (_context.Users == null)
-                return NotFound();
-
             try
             {
                 if (id == null)
-                    return new UserDTO();
+                    return Ok(new UserDTO());
+                _userService.CheckNull();
 
-                var userWork = new UserWork(_context);
-                return await userWork.GetUser(id.Value);
+                return Ok(await _userService.GetUserByIdAsync(id.Value));
             }
             catch (Exception ex)
             {
@@ -67,19 +55,18 @@ namespace testWorkIntellectSoft.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserAnswerDTO>> CreateUser(UserDTO userStruct)
+        public async Task<IActionResult> CreateUser(UserDTO userStruct)
         {
             try
             {
-                if (_context.Users == null)
-                    throw new Exception("Нет подключения к базе данных");
-                else if (string.IsNullOrWhiteSpace(userStruct.FirstName) && string.IsNullOrWhiteSpace(userStruct.LastName))
+                _userService.CheckNull();
+                if (string.IsNullOrWhiteSpace(userStruct.FirstName) && string.IsNullOrWhiteSpace(userStruct.LastName))
                     throw new Exception("Попытка создать пользователя без имени");
 
-                var userWork = new UserWork(_context);
-                await userWork.CreateUser(userStruct);
+                await _userService.CreateUserAsync(userStruct);
 
-                return await GetUsers();
+                var users = await _userService.GetUsersAsync();
+                return Ok(_userService.GetAnswer(users));
             }
             catch (Exception ex)
             {
@@ -88,17 +75,15 @@ namespace testWorkIntellectSoft.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<UserAnswerDTO>> UpdateUser(UserDTO userStruct)
+        public async Task<IActionResult> UpdateUser(UserDTO userStruct)
         {
             try
             {
-                if (_context.Users == null)
-                    throw new Exception("Нет подключения к базе данных");
+                _userService.CheckNull();
+                await _userService.EditUserAsync(userStruct);
 
-                var userWork = new UserWork(_context);
-                await userWork.EditUser(userStruct);
-
-                return await GetUsers();
+                var users = await _userService.GetUsersAsync();
+                return Ok(_userService.GetAnswer(users));
             }
             catch (Exception ex)
             {
@@ -107,18 +92,15 @@ namespace testWorkIntellectSoft.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<UserAnswerDTO>> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            if (_context.Users == null)
-            {
-                return NotFound();
-            }
             try
             {
-                var userWork = new UserWork(_context);
-                await userWork.DeleteUser(id);
+                _userService.CheckNull();
+                await _userService.DeleteUserAsync(id);
 
-                return await GetUsers();
+                var users = await _userService.GetUsersAsync();
+                return Ok(_userService.GetAnswer(users));
             }
             catch (Exception ex)
             {

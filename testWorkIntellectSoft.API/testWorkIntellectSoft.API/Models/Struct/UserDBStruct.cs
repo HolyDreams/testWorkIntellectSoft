@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using testWorkIntellectSoft.API.Models.DTO;
 
 namespace testWorkIntellectSoft.API.Models.Struct
 {
@@ -15,7 +16,7 @@ namespace testWorkIntellectSoft.API.Models.Struct
         [Column("last_name", TypeName = "text")]
         public string? LastName { get; set; }
         [Column("birthyear", TypeName = "int2")]
-        public int BirthYear { get; set; }
+        public int Birthyear { get; set; }
         [Column("delete_state_code", TypeName = "int2")]
         [DefaultValue(0)]
         public int DeleteStateCode { get; set; }

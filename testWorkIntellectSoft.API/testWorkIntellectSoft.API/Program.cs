@@ -1,25 +1,29 @@
 using Microsoft.EntityFrameworkCore;
 using testWorkIntellectSoft.API.Data;
+using testWorkIntellectSoft.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<UserContext>(options =>
+services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+services.AddDbContext<UserContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
                       providerOptions => providerOptions.EnableRetryOnFailure());
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
-builder.Services.AddCors(options => options.AddPolicy(name: "myCors",
+services.AddCors(options => options.AddPolicy(name: "myCors",
     policy =>
     {
         policy.WithOrigins("http://localhost:4200")
               .AllowAnyMethod()
               .AllowAnyHeader();
     }));
+
+services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

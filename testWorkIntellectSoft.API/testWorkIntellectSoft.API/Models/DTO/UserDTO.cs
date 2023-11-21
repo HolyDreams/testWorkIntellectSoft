@@ -13,7 +13,7 @@ namespace testWorkIntellectSoft.API.Models.DTO
         [JsonProperty("birthyear")]
         public int Birthyear { get; set; }
         [JsonProperty("phones")]
-        public PhoneDTO[]? Phones { get; set; }
+        public List<PhoneDTO>? Phones { get; set; }
     }
     public class UserAnswerDTO
     {
@@ -22,7 +22,7 @@ namespace testWorkIntellectSoft.API.Models.DTO
         [JsonProperty("current_page")]
         public int CurentPage { get; set; }
         [JsonProperty("users")]
-        public UserDTO[]? Users { get; set; }
+        public List<UserDTO>? Users { get; set; }
     }
     public class PhoneDTO
     {
